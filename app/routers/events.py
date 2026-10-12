@@ -46,20 +46,13 @@ def create_event(
 )
 def list_events(
     search: str | None = Query(default=None),
-    if location:
-        query = query.filter(
-            Event.location.ilike(f"%{location}%")
-        )
-
-    # Allow explicit searching by title
-    if title:
-        query = query.filter(
-            Event.title.ilike(f"%{title}%")
-        )    db: Session = Depends(get_db)
+    location: str | None = Query(default=None),
+    title: str | None = Query(default=None),
+    db: Session = Depends(get_db)
 ):
     query = db.query(Event)
-
-    # Preserve the existing search parameter
+    
+   # Preserve the existing search parameter
     if search:
         query = query.filter(
             Event.title.ilike(f"%{search}%")
@@ -70,7 +63,7 @@ def list_events(
             Event.location.ilike(f"%{location}%")
         )
 
-    # Allow explicit searching by title
+    
     if title:
         query = query.filter(
             Event.title.ilike(f"%{title}%")
