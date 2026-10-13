@@ -1,20 +1,26 @@
 import pytest
 
+from app.schemas import EventCreate
+
+
 @pytest.fixture
 def sample_event_dict():
     return {
         "title": "Python Developer Meetup",
         "description": "An introductory session on FastAPI and async programming.",
+        "date": "2026-12-01",
         "location": "Online",
-        "capacity": 50
+        "capacity": 50,
     }
+
 
 @pytest.fixture
 def sample_participant_dict():
     return {
         "name": "Jane Doe",
-        "email": "jane.doe@example.com"
+        "email": "jane.doe@example.com",
     }
+
 
 @pytest.fixture
 def mock_event_store():
@@ -22,14 +28,16 @@ def mock_event_store():
     yield store
     store.clear()
 
+
 @pytest.fixture
 def prepopulated_event_store(mock_event_store):
     mock_event_store.extend([
-        {"id": 1, "title": "FastAPI Masterclass", "location": "Algiers", "capacity": 100},
-        {"id": 2, "title": "Cybersecurity Briefing", "location": "Oran", "capacity": 25},
-        {"id": 3, "title": "Python Workshop", "location": "Online", "capacity": 50}
+        EventCreate(title="FastAPI Masterclass", date="2026-11-01", location="Algiers", capacity=100),
+        EventCreate(title="Cybersecurity Briefing", date="2026-11-15", location="Oran", capacity=25),
+        EventCreate(title="Python Workshop", date="2026-12-01", location="Online", capacity=50),
     ])
     return mock_event_store
+
 
 @pytest.fixture(autouse=True)
 def global_environment_logger():
