@@ -11,6 +11,16 @@ router = APIRouter(
     tags=["Registrations"]
 )
 
+def has_available_capacity(current_count: int, max_capacity: int) -> bool:
+    """Return True if the event still has available capacity."""
+    return current_count < max_capacity
+
+
+def check_duplicate_registration(registered_ids: list[int], new_id: int) -> None:
+    """Raise ValueError if the participant is already registered."""
+    if new_id in registered_ids:
+        raise ValueError("Participant is already registered.")
+
 
 @router.post(
     "/{event_id}/register/{participant_id}",
