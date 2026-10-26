@@ -67,6 +67,13 @@ def test_filter_events_by_title_case_insensitive(prepopulated_event_store):
     assert result[0].title == "Python Meetup"
 
 
+def test_filter_events_by_title_mixed_case(prepopulated_event_store):
+    """Kills string lowercasing mutants in event title filters."""
+    result = filter_events_by_title(prepopulated_event_store, "PyThOn mEeTuP")
+    assert len(result) == 1
+    assert result[0].title == "Python Meetup"
+
+
 def test_filter_events_no_match_returns_empty(prepopulated_event_store):
     assert filter_events_by_location(prepopulated_event_store, "Paris") == []
 
@@ -77,22 +84,26 @@ def test_capacity_minimum_boundary(sample_event_dict):
 
 
 def test_capacity_maximum_boundary(sample_event_dict):
+    """Kills relational operator mutants changing capacity > 10000 or <= 10000."""
     assert make_event(sample_event_dict, {"capacity": 10_000}).capacity == 10_000
 
 
 def test_title_length_minimum_boundary(sample_event_dict):
+    """Checks the minimum valid title length boundary (len > 2)."""
     assert make_event(sample_event_dict, {"title": "abc"}).title == "abc"
 
 
 # ======================= NEGATIVE TESTS (2+) =======================
 @pytest.mark.parametrize("short_title", ["", "a", "ab"])
 def test_title_too_short_raises(sample_event_dict, short_title):
+    """Kills mutants modifying title length logic (e.g., len > 2 to >= 2)."""
     with pytest.raises(ValidationError):
         make_event(sample_event_dict, {"title": short_title})
 
 
 @pytest.mark.parametrize("bad_capacity", [0, -1, -100, 10_001])
 def test_capacity_out_of_bounds_raises(sample_event_dict, bad_capacity):
+    """Kills mutants bypassing upper and lower capacity boundaries."""
     with pytest.raises(ValidationError):
         make_event(sample_event_dict, {"capacity": bad_capacity})
 
