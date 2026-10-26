@@ -9,6 +9,16 @@ from ..schemas import Event as EventSchema
 from ..schemas import EventCreate, EventUpdate
 
 
+def filter_events_by_location(events, location: str):
+    """Case-insensitive match on the event location."""
+    return [e for e in events if location.lower() in e.location.lower()]
+
+
+def filter_events_by_title(events, title: str):
+    """Case-insensitive match on the event title."""
+    return [e for e in events if title.lower() in e.title.lower()]
+
+
 router = APIRouter(
     prefix="/events",
     tags=["Events"]
@@ -30,14 +40,15 @@ def create_event(
             detail="Event date cannot be in the past."
         )
 
-    db_event = Event(**event.model_dump())
+    db_event = Event()
+    for key, value in event.model_dump().items():
+        setattr(db_event, key, value)
 
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
 
     return db_event
-
 
 
 @router.get(
@@ -51,25 +62,22 @@ def list_events(
     db: Session = Depends(get_db)
 ):
     query = db.query(Event)
-    
-   # Preserve the existing search parameter
+
+    # Preserve the existing search parameter
     if search:
         query = query.filter(
             Event.title.ilike(f"%{search}%")
         )
 
+    events = query.order_by(Event.date).all()
+
     if location:
-        query = query.filter(
-            Event.location.ilike(f"%{location}%")
-        )
+        events = filter_events_by_location(events, location)
 
-    
     if title:
-        query = query.filter(
-            Event.title.ilike(f"%{title}%")
-        )
-    return query.order_by(Event.date).all()
+        events = filter_events_by_title(events, title)
 
+    return events
 
 
 @router.get(
