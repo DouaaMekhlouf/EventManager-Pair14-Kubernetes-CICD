@@ -23,3 +23,5 @@ mutants/
 htmlcov/
 .coverage
 .coverage.*
+
+.coverage
