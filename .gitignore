@@ -13,5 +13,15 @@ events.db
 
 .vscode/
 .idea/
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+
+# Mutation testing and coverage artifacts
+mutants/
+htmlcov/
+.coverage
+.coverage.*
 
 .coverage
