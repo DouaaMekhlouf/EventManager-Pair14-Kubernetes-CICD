@@ -287,7 +287,7 @@ def test_no_duplicate_registration_passes():
 def test_duplicate_registration_raises_value_error():
     with pytest.raises(
         ValueError,
-        match="^Participant is already registered\\.$"
+        match=r"^Participant \d+ is already registered$"
     ):
         check_duplicate_registration([1, 2, 3], 2)
 
