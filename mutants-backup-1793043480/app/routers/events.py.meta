@@ -1,0 +1,17 @@
+{
+    "exit_code_by_key": {
+        "app.routers.events.x_filter_events_by_location__mutmut_1": null,
+        "app.routers.events.x_filter_events_by_location__mutmut_2": null,
+        "app.routers.events.x_filter_events_by_location__mutmut_3": null,
+        "app.routers.events.x_filter_events_by_title__mutmut_1": null,
+        "app.routers.events.x_filter_events_by_title__mutmut_2": null,
+        "app.routers.events.x_filter_events_by_title__mutmut_3": null
+    },
+    "hash_by_function_name": {
+        "x_filter_events_by_location": "8b69cab4d5f5",
+        "x_filter_events_by_title": "bd1b252c4d36"
+    },
+    "type_check_error_by_key": {},
+    "durations_by_key": {},
+    "estimated_durations_by_key": {}
+}

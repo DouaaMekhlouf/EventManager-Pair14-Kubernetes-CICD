@@ -1,0 +1,14 @@
+{
+    "exit_code_by_key": {
+        "app.routers.registrations.x_has_available_capacity__mutmut_1": null,
+        "app.routers.registrations.x_check_duplicate_registration__mutmut_1": null,
+        "app.routers.registrations.x_check_duplicate_registration__mutmut_2": null
+    },
+    "hash_by_function_name": {
+        "x_has_available_capacity": "5d34e9387931",
+        "x_check_duplicate_registration": "893dc1027923"
+    },
+    "type_check_error_by_key": {},
+    "durations_by_key": {},
+    "estimated_durations_by_key": {}
+}
