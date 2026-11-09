@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Manager</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f4f6f9;
+        }
+
+        h1 {
+            color: #263b5e;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #263b5e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #385783;
+        }
+
+        li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        #message {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Event Manager UI</h1>
+
+    <p>View the events stored in the Event Manager API.</p>
+
+    <button id="fetchButton" onclick="loadEvents()">
+        Fetch Events
+    </button>
+
+    <p id="message"></p>
+
+    <ul id="eventList"></ul>
+
+    <script>
+        const API_URL = "http://localhost:8000/events/";
+
+        async function loadEvents() {
+            const eventList = document.getElementById("eventList");
+            const message = document.getElementById("message");
+            const button = document.getElementById("fetchButton");
+
+            eventList.replaceChildren();
+            message.textContent = "Loading events...";
+            button.disabled = true;
+
+            try {
+                const response = await fetch(API_URL);
+
+                if (!response.ok) {
+                    throw new Error("API request failed: " + response.status);
+                }
+
+                const events = await response.json();
+
+                if (events.length === 0) {
+                    message.textContent = "No events found.";
+                    return;
+                }
+
+                events.forEach(event => {
+                    const item = document.createElement("li");
+
+                    item.textContent =
+                        event.title + " - " + event.location;
+
+                    eventList.appendChild(item);
+                });
+
+                message.textContent =
+                    events.length + " event(s) loaded successfully.";
+
+            } catch (error) {
+                message.textContent =
+                    "Error: Could not connect to the backend API. " +
+                    error.message;
+
+            } finally {
+                button.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+</html>
