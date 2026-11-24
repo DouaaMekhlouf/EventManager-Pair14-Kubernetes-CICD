@@ -1,14 +1,18 @@
 import uuid
+from datetime import date, timedelta
 from fastapi.testclient import TestClient
 from app.main import app
 
 client = TestClient(app)
 
+def future_date(days=30):
+    return (date.today() + timedelta(days=days)).isoformat()
+
 def test_create_and_fetch_event_integration():
     response = client.post("/events/", json={
         "title": "DevOps Integration Conf", "location": "Constantine",
-        "date": "2026-12-01", "capacity": 200})
-    assert response.status_code == 201
+        "date": future_date(), "capacity": 200})
+    assert response.status_code == 201, response.text
     event_id = response.json()["id"]
 
     get_resp = client.get(f"/events/{event_id}")
@@ -18,7 +22,8 @@ def test_create_and_fetch_event_integration():
 def test_register_participant_to_event_integration():
     e_resp = client.post("/events/", json={
         "title": "Cybersecurity Workshop", "location": "NTIC",
-        "date": "2026-11-15", "capacity": 50})
+        "date": future_date(), "capacity": 50})
+    assert e_resp.status_code == 201, e_resp.text
     event_id = e_resp.json()["id"]
 
     p_resp = client.post("/participants/", json={
